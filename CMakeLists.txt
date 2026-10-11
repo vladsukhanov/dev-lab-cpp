@@ -1,23 +1,25 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.25)
 
-project(dev_cpp_lab)
+project(dev_lab_cpp LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_BUILD_TYPE Debug)
+option(BUILD_TESTS "Build tests" ON)
+option(ENABLE_COVERAGE "Enable gcov coverage" OFF)
 
-set(SOURCES
-    source/main.cpp
-    source/TempFun.cpp
-    source/Base.cpp
-)
+add_library(project_coverage INTERFACE)
+if(ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(project_coverage INTERFACE --coverage -O0 -g)
+    target_link_options(project_coverage INTERFACE --coverage)
+endif()
 
-add_executable(sample_program ${SOURCES})
+find_package(fmt CONFIG REQUIRED)
 
-target_include_directories(sample_program PRIVATE include)
+add_subdirectory(src)
 
-## Adding tests
-enable_testing() # Enable CTest support
-add_subdirectory(external/googletest)
-add_subdirectory(test)
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(test)
+endif()

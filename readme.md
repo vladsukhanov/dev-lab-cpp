@@ -1,4 +1,4 @@
-# dev_cpp_lab
+# dev_lab_cpp
 
 This is a simple C++ template project.
 The project uses **CMake** to manage the build process.

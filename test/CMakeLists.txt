@@ -1,30 +1,13 @@
-cmake_minimum_required(VERSION 3.10)
+find_package(GTest CONFIG REQUIRED)
 
-project(dev_cpp_lab_tests)
-
-# Test source files
-set(TEST_SOURCES
-    BaseTest.cpp
-    TempFunTest.cpp
-    ../source/TempFun.cpp
-    ../source/Base.cpp
+add_executable(calculator_tests
+    CalculatorTest.cpp
 )
 
-# Create the test executable
-add_executable(sample_tests ${TEST_SOURCES})
-
-# Include project headers
-target_include_directories(sample_tests PRIVATE ../include)
-
-# Link with Google Test
-target_link_libraries(sample_tests PRIVATE 
-    gtest
-    gtest_main
-    -fprofile-arcs
-    -ftest-coverage
+target_link_libraries(calculator_tests PRIVATE
+    calculator
+    GTest::gtest_main
 )
 
-target_compile_options(sample_tests PRIVATE -fprofile-arcs -ftest-coverage)
-
-# Add tests to CTest
-add_test(NAME run_ctests COMMAND sample_tests)
+include(GoogleTest)
+gtest_discover_tests(calculator_tests)
